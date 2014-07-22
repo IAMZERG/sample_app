@@ -2,9 +2,14 @@ require 'spec_helper'
 
 describe "Static pages" do
 
-  def check_title
-	  visit '/static_pages/home'
-	  expect(page).to have_title("Ruby on Rails Tutorial Sample App")
+  let(:base_title) { "Ruby on Rails Tutorial Sample App" }
+
+  def check_title(my_title = "")
+    if my_title==""
+	  expect(page).to have_title("#{base_title}");
+	else
+	  expect(page).to have_title("#{base_title} | #{my_title}");
+	end
   end
 
   describe "Home page" do
@@ -14,9 +19,16 @@ describe "Static pages" do
       expect(page).to have_content('Sample App');
     end
 	
-	it "should have the right title" do
-	  check_title
+	it "should have the base title" do
+	  visit '/static_pages/home';
+	  check_title()
 	end
+	
+	it "should not have a custom title" do
+	  visit '/static_pages/home'
+	  expect(page).not_to have_title('| Home')
+	end
+	
   end
   
   describe "Help page" do
@@ -25,8 +37,14 @@ describe "Static pages" do
 	  expect(page).to have_content('Help');
 	end
 	
-	it "should have the right title" do
-	  check_title
+	it "should have the base title" do
+	  visit '/static_pages/help';
+	  check_title('Help')
+	end
+	
+	it "should have a custom title" do
+	  visit '/static_pages/help'
+	  expect(page).to have_title('| Help')
 	end
   end
   
@@ -36,8 +54,14 @@ describe "Static pages" do
 	  expect(page).to have_content('About Us');
 	end
 	
-	it "should have the right title" do
-	  check_title
+	it "should have the base title" do
+	  visit '/static_pages/about';
+	  check_title('About Us')
+	end
+	
+	it "should have a custom title" do
+	  visit '/static_pages/about';
+	  expect(page).to have_title('| About Us')
 	end
   end
   
@@ -47,8 +71,14 @@ describe "Static pages" do
 	  expect(page).to have_content('Contact Us');
 	end
 	
-	it "should have the right title" do
-	  check_title
+	it "should have the base title" do
+	  visit '/static_pages/contact';
+	  check_title('Contact Us')
+	end
+	
+	it "should have a custom title" do
+	  visit '/static_pages/contact'
+	  expect(page).to have_title('| Contact Us')
 	end
   end
 end
